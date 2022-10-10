@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -17,6 +16,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//StatefluWidgetを使って描画タイミングを管理
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -29,14 +29,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List items = [];
 
+//GoogleBoooksAPI取得 非同期処理
   Future<void> getData() async {
     var response = await http.get(Uri.https(
         'www.googleapis.com',
         '/books/v1/volumes',
-        {'q': '{Flutter}', 'maxResults': '40', 'langRestrict': 'ja'}));
-
+        {'q': '{fltter}', 'maxResults': '40', 'langRestrict': 'ja'}));
     var jsonResponse = jsonDecode(response.body);
-
+//stateにセット
     setState(() {
       items = jsonResponse['items'];
     });
@@ -46,9 +46,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
+    //API呼び出したら描画 （データ更新・再描画）
     getData();
   }
 
+//ListViewでAPIから取得した値を表示
   @override
   Widget build(BuildContext context) {
     return Scaffold(
